@@ -11,8 +11,8 @@
     <style>
         body {
             font-family: 'Nunito', sans-serif;
-            background-color: #fdf2f8; /* Soft pink background */
-            overflow: hidden; /* Prevents scrollbars when the No button moves */
+            background-color: #fdf2f8; 
+            overflow: hidden; 
             margin: 0;
             height: 100vh;
             display: flex;
@@ -99,7 +99,7 @@
         .btn-no {
             background-color: #9ca3af;
             color: white;
-            position: relative; /* Will become fixed via JS */
+            position: relative;
             z-index: 50;
         }
 
@@ -150,7 +150,7 @@
             🥺 You do not wanna give me anything extra at all?
         </p>
 
-        <button onclick="validateAndProceed()" class="btn btn-yes w-full mt-2">Next ❤️</button>
+        <button id="submitBtn" onclick="validateAndProceed()" class="btn btn-yes w-full mt-2 transition-all">Next ❤️</button>
     </div>
 
     <div id="step4" class="step-container">
@@ -167,14 +167,11 @@
 
         // Function to move to the next step
         function nextStep(stepNumber) {
-            // Hide all steps
             document.querySelectorAll('.step-container').forEach(el => {
                 el.classList.remove('active');
             });
-            // Show target step
             document.getElementById('step' + stepNumber).classList.add('active');
             
-            // If it's the final step, fire confetti!
             if(stepNumber === 4) {
                 fireConfetti();
             }
@@ -182,41 +179,67 @@
 
         // Logic for the "No" button dodging
         function dodgeCursor(btn) {
-            // Make button fixed so it can move anywhere on screen
             btn.style.position = 'fixed';
             
-            // Calculate safe boundaries so the button doesn't go off-screen
             const btnWidth = btn.offsetWidth;
             const btnHeight = btn.offsetHeight;
             const maxX = window.innerWidth - btnWidth - 20;
             const maxY = window.innerHeight - btnHeight - 20;
             
-            // Generate random coordinates
             const randomX = Math.max(20, Math.floor(Math.random() * maxX));
             const randomY = Math.max(20, Math.floor(Math.random() * maxY));
             
-            // Apply new position
             btn.style.left = randomX + 'px';
             btn.style.top = randomY + 'px';
         }
 
-        // Logic for validating Step 3
-        function validateAndProceed() {
+        // UPDATED: Async function integrating Web3Forms API
+        async function validateAndProceed() {
             const inputVal = document.getElementById('extraInput').value.trim();
             const warning = document.getElementById('sadWarning');
+            const submitBtn = document.getElementById('submitBtn');
             
             if (inputVal === '') {
                 // Show sad warning if empty
                 warning.classList.remove('hidden');
-                // Shake the box a little
                 const container = document.getElementById('step3');
                 container.style.transform = 'translateX(-10px)';
                 setTimeout(() => container.style.transform = 'translateX(10px)', 100);
                 setTimeout(() => container.style.transform = 'translateX(0)', 200);
             } else {
-                // Proceed to final page if user wrote something
+                // User wrote something! Let's send it via Web3Forms
                 warning.classList.add('hidden');
-                nextStep(4);
+                
+                // Update UI to show sending status
+                const originalText = submitBtn.innerText;
+                submitBtn.innerText = "Sending... 💌";
+                submitBtn.disabled = true;
+                submitBtn.classList.add('opacity-75', 'cursor-not-allowed');
+
+                try {
+                    // Send data securely in the background using JSON
+                    await fetch("https://api.web3forms.com/submit", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "Accept": "application/json"
+                        },
+                        body: JSON.stringify({
+                            access_key: "825c9e9a-6d95-44e5-880e-641df6d87d9a", // Your provided Web3Forms Key
+                            subject: "New Message from Your Girlfriend! ❤️",
+                            message: inputVal
+                        })
+                    });
+                } catch (error) {
+                    console.error("Email API Error:", error);
+                    // We catch the error so it doesn't break the page if there's a network glitch
+                } finally {
+                    // Always proceed to the final page so her experience is flawless
+                    submitBtn.innerText = originalText;
+                    submitBtn.disabled = false;
+                    submitBtn.classList.remove('opacity-75', 'cursor-not-allowed');
+                    nextStep(4);
+                }
             }
         }
 
