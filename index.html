@@ -3,265 +3,292 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>For You ❤️</title>
+    <title>Fantasy Land 🥀</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
     
     <style>
         body {
-            font-family: 'Nunito', sans-serif;
-            background-color: #fdf2f8; 
-            overflow: hidden; 
+            font-family: 'Inter', sans-serif;
+            background-color: #0a0a0a;
+            background-image: radial-gradient(circle at center, #1f0505 0%, #0a0a0a 100%);
+            color: #f3f4f6;
+            overflow-x: hidden;
             margin: 0;
-            height: 100vh;
+            min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
         }
 
+        h1, h2 {
+            font-family: 'Cinzel', serif;
+        }
+
         /* Container & Transitions */
         .step-container {
-            background: white;
+            background: rgba(15, 15, 15, 0.95);
             padding: 2.5rem 2rem;
-            border-radius: 1.5rem;
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            border-radius: 1rem;
+            box-shadow: 0 0 30px -5px rgba(220, 38, 38, 0.2);
             width: 90%;
-            max-width: 450px;
+            max-width: 500px;
             text-align: center;
-            border: 4px solid #fbcfe8;
+            border: 1px solid rgba(220, 38, 38, 0.3);
             display: none;
             opacity: 0;
-            transform: scale(0.95);
+            transform: translateY(20px);
             transition: opacity 0.5s ease, transform 0.5s ease;
         }
         .step-container.active {
             display: block;
             opacity: 1;
-            transform: scale(1);
+            transform: translateY(0);
         }
 
-        /* Pure CSS Blooming Flower */
-        .flower {
-            position: relative;
-            width: 120px;
-            height: 120px;
-            margin: 0 auto 2rem auto;
+        /* Themed Buttons */
+        .opt-btn {
+            width: 100%;
+            padding: 0.875rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            background-color: #171717;
+            border: 1px solid #450a0a;
+            color: #fca5a5;
+            margin-bottom: 0.75rem;
         }
-        .petal {
-            position: absolute;
-            width: 40px;
-            height: 40px;
-            background: #f472b6;
-            border-radius: 50% 50% 0 50%;
-            top: 40px;
-            left: 40px;
-            transform-origin: bottom right;
-            transition: transform 1.5s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 0 10px rgba(244, 114, 182, 0.4);
+        .opt-btn:hover {
+            background-color: #2e0808;
+            border-color: #7f1d1d;
         }
-        .flower-center {
-            position: absolute;
-            width: 45px;
-            height: 45px;
-            background: #fbbf24;
-            border-radius: 50%;
-            top: 38px;
-            left: 38px;
-            z-index: 10;
+        .opt-btn.selected {
+            background-color: #991b1b;
+            color: white;
+            border-color: #ef4444;
+            box-shadow: 0 0 15px rgba(220, 38, 38, 0.4);
         }
-        /* Bloom states */
-        .flower.bloom .p1 { transform: rotate(0deg) translateX(35px) scale(1.2); }
-        .flower.bloom .p2 { transform: rotate(45deg) translateX(35px) scale(1.2); }
-        .flower.bloom .p3 { transform: rotate(90deg) translateX(35px) scale(1.2); }
-        .flower.bloom .p4 { transform: rotate(135deg) translateX(35px) scale(1.2); }
-        .flower.bloom .p5 { transform: rotate(180deg) translateX(35px) scale(1.2); }
-        .flower.bloom .p6 { transform: rotate(225deg) translateX(35px) scale(1.2); }
-        .flower.bloom .p7 { transform: rotate(270deg) translateX(35px) scale(1.2); }
-        .flower.bloom .p8 { transform: rotate(315deg) translateX(35px) scale(1.2); }
 
-        /* Buttons */
-        .btn {
-            padding: 0.75rem 2rem;
+        .action-btn {
+            background-color: #dc2626;
+            color: white;
+            padding: 0.75rem 2.5rem;
             border-radius: 9999px;
             font-weight: bold;
             font-size: 1.125rem;
-            transition: transform 0.1s, box-shadow 0.2s;
-            cursor: pointer;
             border: none;
+            cursor: pointer;
+            transition: transform 0.1s, box-shadow 0.2s, background-color 0.3s;
+            box-shadow: 0 10px 15px -3px rgba(220, 38, 38, 0.3);
+            margin-top: 1.5rem;
         }
-        .btn:active { transform: scale(0.95); }
-        .btn-yes {
-            background-color: #ec4899;
-            color: white;
-            box-shadow: 0 10px 15px -3px rgba(236, 72, 153, 0.4);
+        .action-btn:hover {
+            background-color: #b91c1c;
         }
-        .btn-no {
-            background-color: #9ca3af;
-            color: white;
-            position: relative;
-            z-index: 50;
+        .action-btn:active {
+            transform: scale(0.95);
+        }
+        .action-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
         }
 
-        /* Heart Animation for Final Page */
-        .heart {
-            color: #e11d48;
-            font-size: 4rem;
-            animation: beat 1s infinite alternate;
+        /* Inputs */
+        .themed-input {
+            width: 100%;
+            background-color: #171717;
+            border: 1px solid #450a0a;
+            color: #fecaca;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            outline: none;
+            transition: all 0.3s ease;
+            resize: none;
         }
-        @keyframes beat {
-            to { transform: scale(1.2); }
+        .themed-input:focus {
+            border-color: #dc2626;
+            box-shadow: 0 0 10px rgba(220, 38, 38, 0.2);
+        }
+        .themed-input::placeholder {
+            color: #7f1d1d;
         }
     </style>
 </head>
 <body>
 
-    <div id="step1" class="step-container active">
-        <div class="flower" id="flower">
-            <div class="petal p1"></div><div class="petal p2"></div>
-            <div class="petal p3"></div><div class="petal p4"></div>
-            <div class="petal p5"></div><div class="petal p6"></div>
-            <div class="petal p7"></div><div class="petal p8"></div>
-            <div class="flower-center"></div>
+    <div id="step0" class="step-container active">
+        <h1 class="text-3xl font-bold text-red-600 mb-4 tracking-wider">Welcome to the<br>Fantasy Land 🥀</h1>
+        <p class="text-red-200/70 mb-8 italic">Let's set the rules for our next meeting...</p>
+        <button onclick="nextStep(0, 1)" class="action-btn w-full">Enter</button>
+    </div>
+
+    <div id="step1" class="step-container">
+        <h2 class="text-xl font-bold text-red-500 mb-6">Which position do you like most?</h2>
+        <div class="options-group">
+            <button onclick="selectOption('q1', 'The Cowgirl', this)" class="opt-btn">The Cowgirl</button>
+            <button onclick="selectOption('q1', 'Missionary', this)" class="opt-btn">Missionary</button>
+            <button onclick="selectOption('q1', 'Spooning', this)" class="opt-btn">Spooning</button>
+            <button onclick="selectOption('q1', 'Cross', this)" class="opt-btn">Cross</button>
+            <button onclick="selectOption('q1', 'Doggy style', this)" class="opt-btn">Doggy style</button>
+            <button onclick="selectOption('q1', 'All of the above', this)" class="opt-btn">All of them</button>
         </div>
-        <h1 class="text-2xl font-bold text-pink-600 mb-6">Do you love me? 🌸</h1>
-        <div class="flex justify-center gap-4 relative h-12">
-            <button onclick="nextStep(2)" class="btn btn-yes">Yes</button>
-            <button onmouseover="dodgeCursor(this)" ontouchstart="dodgeCursor(this)" class="btn btn-no">No</button>
-        </div>
+        <input type="text" id="q1_text" placeholder="Or type your favorite here..." class="themed-input mt-2 py-2">
+        <button onclick="nextStep(1, 2)" class="action-btn w-full">Next</button>
     </div>
 
     <div id="step2" class="step-container">
-        <h1 class="text-2xl font-bold text-pink-600 mb-6">Are you sure you love me? 🥺</h1>
-        <div class="flex justify-center gap-4 relative h-12">
-            <button onclick="nextStep(3)" class="btn btn-yes">Yes, forever!</button>
-            <button onmouseover="dodgeCursor(this)" ontouchstart="dodgeCursor(this)" class="btn btn-no">No</button>
+        <h2 class="text-xl font-bold text-red-500 mb-6">You like doing it:</h2>
+        <div class="options-group">
+            <button onclick="selectOption('q2', 'With condom', this)" class="opt-btn">With condom</button>
+            <button onclick="selectOption('q2', 'Without condom', this)" class="opt-btn">Without condom</button>
         </div>
+        <button onclick="nextStep(2, 3)" class="action-btn w-full">Next</button>
     </div>
 
     <div id="step3" class="step-container">
-        <h1 class="text-2xl font-bold text-pink-600 mb-2">Can you give me kiss, hug... 🥰</h1>
-        <p class="text-gray-500 mb-4 font-semibold">can you give me that?</p>
-        
-        <textarea id="extraInput" rows="3" placeholder="If you want you can give me more also..." 
-            class="w-full border-2 border-pink-200 rounded-xl p-3 focus:ring-2 focus:ring-pink-400 focus:border-pink-400 outline-none transition-all resize-none mb-2"></textarea>
-        
-        <p id="sadWarning" class="text-red-500 font-semibold text-sm hidden mb-4">
-            🥺 You do not wanna give me anything extra at all?
-        </p>
-
-        <button id="submitBtn" onclick="validateAndProceed()" class="btn btn-yes w-full mt-2 transition-all">Next ❤️</button>
+        <h2 class="text-xl font-bold text-red-500 mb-6">Best place to do it:</h2>
+        <div class="options-group">
+            <button onclick="selectOption('q3', 'In bed', this)" class="opt-btn">In bed</button>
+            <button onclick="selectOption('q3', 'On couch', this)" class="opt-btn">On couch</button>
+            <button onclick="selectOption('q3', 'On kitchen top', this)" class="opt-btn">On kitchen top</button>
+            <button onclick="selectOption('q3', 'In bathroom', this)" class="opt-btn">In bathroom</button>
+        </div>
+        <button onclick="nextStep(3, 4)" class="action-btn w-full">Next</button>
     </div>
 
     <div id="step4" class="step-container">
-        <div class="heart mb-4">❤️</div>
-        <h1 class="text-3xl font-bold text-pink-600 mb-2">I love you so much meri jaan,</h1>
-        <h2 class="text-2xl font-bold text-pink-500 italic">Sunkiss 💋</h2>
+        <h2 class="text-xl font-bold text-red-500 mb-6">What do you like most in foreplay?</h2>
+        <div class="options-group">
+            <button onclick="selectOption('q4', 'Licking', this)" class="opt-btn">Licking</button>
+            <button onclick="selectOption('q4', 'Fingering', this)" class="opt-btn">Fingering</button>
+        </div>
+        <button onclick="nextStep(4, 5)" class="action-btn w-full">Next</button>
+    </div>
+
+    <div id="step5" class="step-container">
+        <h2 class="text-xl font-bold text-red-500 mb-4">If you want to change something next time, what should it be?</h2>
+        <textarea id="q5_text" rows="4" placeholder="Tell me your desires..." class="themed-input"></textarea>
+        <button onclick="nextStep(5, 6)" class="action-btn w-full">Next</button>
+    </div>
+
+    <div id="step6" class="step-container">
+        <h2 class="text-xl font-bold text-red-500 mb-4">Anything else on your mind?</h2>
+        <textarea id="q6_text" rows="4" placeholder="You can add something extra here..." class="themed-input"></textarea>
+        
+        <button id="submitBtn" onclick="submitSurvey()" class="action-btn w-full">Send to my Lord 💌</button>
+    </div>
+
+    <div id="step7" class="step-container">
+        <h1 class="text-3xl font-bold text-red-600 mb-4 tracking-wider">Perfect.</h1>
+        <h2 class="text-xl text-red-200 italic">I will keep this in mind for the meeting my lady. 🍷</h2>
     </div>
 
     <script>
-        // Trigger Flower Bloom on load
-        setTimeout(() => {
-            document.getElementById('flower').classList.add('bloom');
-        }, 300);
+        // Object to store all selected answers
+        const surveyData = {
+            q1: "Not selected",
+            q2: "Not selected",
+            q3: "Not selected",
+            q4: "Not selected"
+        };
 
-        // Function to move to the next step
-        function nextStep(stepNumber) {
-            document.querySelectorAll('.step-container').forEach(el => {
-                el.classList.remove('active');
-            });
-            document.getElementById('step' + stepNumber).classList.add('active');
+        // Handles switching between pages
+        function nextStep(current, next) {
+            document.getElementById('step' + current).classList.remove('active');
+            document.getElementById('step' + next).classList.add('active');
             
-            if(stepNumber === 4) {
-                fireConfetti();
+            if(next === 7) {
+                fireRedConfetti();
             }
         }
 
-        // Logic for the "No" button dodging
-        function dodgeCursor(btn) {
-            btn.style.position = 'fixed';
+        // Handles visually selecting a button and saving the data
+        function selectOption(questionKey, value, btnElement) {
+            surveyData[questionKey] = value;
             
-            const btnWidth = btn.offsetWidth;
-            const btnHeight = btn.offsetHeight;
-            const maxX = window.innerWidth - btnWidth - 20;
-            const maxY = window.innerHeight - btnHeight - 20;
+            // Deselect siblings
+            const siblings = btnElement.parentElement.querySelectorAll('.opt-btn');
+            siblings.forEach(btn => btn.classList.remove('selected'));
             
-            const randomX = Math.max(20, Math.floor(Math.random() * maxX));
-            const randomY = Math.max(20, Math.floor(Math.random() * maxY));
-            
-            btn.style.left = randomX + 'px';
-            btn.style.top = randomY + 'px';
+            // Select clicked
+            btnElement.classList.add('selected');
         }
 
-        // UPDATED: Async function integrating Web3Forms API
-        async function validateAndProceed() {
-            const inputVal = document.getElementById('extraInput').value.trim();
-            const warning = document.getElementById('sadWarning');
+        // Compiles data and sends email
+        async function submitSurvey() {
             const submitBtn = document.getElementById('submitBtn');
+            const originalText = submitBtn.innerText;
             
-            if (inputVal === '') {
-                // Show sad warning if empty
-                warning.classList.remove('hidden');
-                const container = document.getElementById('step3');
-                container.style.transform = 'translateX(-10px)';
-                setTimeout(() => container.style.transform = 'translateX(10px)', 100);
-                setTimeout(() => container.style.transform = 'translateX(0)', 200);
-            } else {
-                // User wrote something! Let's send it via Web3Forms
-                warning.classList.add('hidden');
-                
-                // Update UI to show sending status
-                const originalText = submitBtn.innerText;
-                submitBtn.innerText = "Sending... 💌";
-                submitBtn.disabled = true;
-                submitBtn.classList.add('opacity-75', 'cursor-not-allowed');
+            submitBtn.innerText = "Whispering to him...";
+            submitBtn.disabled = true;
 
-                try {
-                    // Send data securely in the background using JSON
-                    await fetch("https://api.web3forms.com/submit", {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/json",
-                            "Accept": "application/json"
-                        },
-                        body: JSON.stringify({
-                            access_key: "825c9e9a-6d95-44e5-880e-641df6d87d9a", // Your provided Web3Forms Key
-                            subject: "New Message from Your Girlfriend! ❤️",
-                            message: inputVal
-                        })
-                    });
-                } catch (error) {
-                    console.error("Email API Error:", error);
-                    // We catch the error so it doesn't break the page if there's a network glitch
-                } finally {
-                    // Always proceed to the final page so her experience is flawless
-                    submitBtn.innerText = originalText;
-                    submitBtn.disabled = false;
-                    submitBtn.classList.remove('opacity-75', 'cursor-not-allowed');
-                    nextStep(4);
-                }
+            // Gather any text input overrides
+            const q1TextVal = document.getElementById('q1_text').value.trim();
+            const finalQ1 = q1TextVal !== "" ? q1TextVal : surveyData.q1;
+            
+            const q5TextVal = document.getElementById('q5_text').value.trim();
+            const q6TextVal = document.getElementById('q6_text').value.trim();
+
+            // Format the email message beautifully
+            const formattedMessage = `
+🥀 FANTASY LAND RESULTS 🥀
+---------------------------------
+1. Favorite Position: ${finalQ1}
+2. Protection Preference: ${surveyData.q2}
+3. Best Place: ${surveyData.q3}
+4. Favorite Foreplay: ${surveyData.q4}
+---------------------------------
+5. Wants to change/try next time: 
+${q5TextVal || "Nothing specified"}
+
+6. Extra notes: 
+${q6TextVal || "Nothing specified"}
+            `;
+
+            try {
+                // Send securely via Web3Forms
+                await fetch("https://api.web3forms.com/submit", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Accept": "application/json"
+                    },
+                    body: JSON.stringify({
+                        access_key: "825c9e9a-6d95-44e5-880e-641df6d87d9a", 
+                        subject: "New Fantasy Land Desires 🍷",
+                        message: formattedMessage
+                    })
+                });
+            } catch (error) {
+                console.error("API Error:", error);
+            } finally {
+                // Move to final page
+                nextStep(6, 7);
             }
         }
 
-        // Confetti celebration function
-        function fireConfetti() {
+        // Custom Red/Black themed confetti
+        function fireRedConfetti() {
             var duration = 3 * 1000;
             var end = Date.now() + duration;
 
             (function frame() {
                 confetti({
-                    particleCount: 5,
+                    particleCount: 4,
                     angle: 60,
                     spread: 55,
                     origin: { x: 0 },
-                    colors: ['#ec4899', '#f472b6', '#fbcfe8']
+                    colors: ['#dc2626', '#991b1b', '#000000', '#ffffff']
                 });
                 confetti({
-                    particleCount: 5,
+                    particleCount: 4,
                     angle: 120,
                     spread: 55,
                     origin: { x: 1 },
-                    colors: ['#ec4899', '#f472b6', '#fbcfe8']
+                    colors: ['#dc2626', '#991b1b', '#000000', '#ffffff']
                 });
 
                 if (Date.now() < end) {
